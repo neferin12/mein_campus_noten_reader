@@ -48,7 +48,8 @@ export default{
         await loginButton.click();
         await page.waitForNavigation();
 
-        await page.type("#username", process.env.USER);
+	console.log("Logging in "+process.env.USERNAME);
+        await page.type("#username", process.env.USERNAME);
         await page.type("#password", process.env.PASSWORD);
         await page.click("#submit_button");
         await page.waitForSelector("#pruefungen")
