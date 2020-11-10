@@ -29,12 +29,17 @@ async function getObjectsFromTable(page) {
 
 export default{
     getData: async function (){
+        const DEBUG = false;
+
         const debugOptions = {
             headless: false,
             slowMo: 100
         };
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            ...(DEBUG?debugOptions:{}),
+            args: ['--lang=de-DE, de']
+        });
 
         const page = await browser.newPage();
         await page.goto('https://campus.fau.de');
