@@ -14,5 +14,7 @@ dotenv.config();
     fs.writeFile("out.json", JSON.stringify(ret), err => {
         if (err) return console.log(err);
     });
-    sender.sendChangeNotice(difference);
+    if (difference.length > 0) {
+        sender.sendChangeNotice(difference);
+    }
 })();
