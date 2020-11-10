@@ -67,5 +67,9 @@ export default{
         const ret = await getObjectsFromTable(page);
         await browser.close();
         return ret;
+    },
+
+    detectChanges: function (olds, news) {
+        return news.filter(item => !olds.map(obj => obj['#']).includes(item['#']));
     }
 }
