@@ -1,7 +1,7 @@
 {
   "name": "mein_campus_noten_reader",
   "version": "1.0.0",
-  "description": "",
+  "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
