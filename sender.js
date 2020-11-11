@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
         requireTLS:true
     }
 },{
-    from: env.SMTP_USER,
+    from: '"Notencrawler" '+env.SMTP_USER,
     to: env.MAILTO,
     priority: 'high'
 });
