@@ -27,8 +27,8 @@ async function getObjectsFromTable(page) {
     return objects;
 }
 
-export default{
-    getData: async function (){
+export default {
+    getData: async function () {
         const DEBUG = false;
 
         const debugOptions = {
@@ -37,7 +37,7 @@ export default{
         };
 
         const browser = await puppeteer.launch({
-            ...(DEBUG?debugOptions:{}),
+            ...(DEBUG ? debugOptions : {}),
             args: ['--lang=de-DE, de']
         });
 
@@ -48,8 +48,8 @@ export default{
         await loginButton.click();
         await page.waitForNavigation();
 
-	console.log("Logging in "+process.env.USERNAME);
-        await page.type("#username", process.env.USERNAME);
+        console.log("Logging in " + process.env.IDM_USERNAME);
+        await page.type("#username", process.env.IDM_USERNAME);
         await page.type("#password", process.env.PASSWORD);
         await page.click("#submit_button");
         await page.waitForSelector("#pruefungen")
