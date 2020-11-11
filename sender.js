@@ -17,7 +17,8 @@ let transporter = nodemailer.createTransport({
     }
 },{
     from: env.SMTP_USER,
-    to: env.MAILTO
+    to: env.MAILTO,
+    priority: 'high'
 });
 
 function send (message) {
