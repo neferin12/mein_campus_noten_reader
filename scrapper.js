@@ -41,33 +41,39 @@ export default {
             args: ['--lang=de-DE, de']
         });
 
-        const page = await browser.newPage();
-        await page.goto('https://campus.fau.de');
+        try {
+            const page = await browser.newPage();
+            await page.goto('https://campus.fau.de');
 
-        const loginButton = await page.$(".allInclusive > a");
-        await loginButton.click();
-        await page.waitForNavigation();
+            const loginButton = await page.$(".allInclusive > a");
+            await loginButton.click();
+            await page.waitForNavigation();
 
-        console.log("Logging in " + process.env.IDM_USERNAME);
-        await page.type("#username", process.env.IDM_USERNAME);
-        await page.type("#password", process.env.PASSWORD);
-        await page.click("#submit_button");
-        await page.waitForSelector("#pruefungen")
+            console.log("Logging in " + process.env.IDM_USERNAME);
+            await page.type("#username", process.env.IDM_USERNAME);
+            await page.type("#password", process.env.PASSWORD);
+            await page.click("#submit_button");
+            await page.waitForSelector("#pruefungen");
 
-        await page.click("#pruefungen");
+            await page.click("#pruefungen");
 
-        const [link] = await page.$x("//a[contains(., 'Notenspiegel')]");
-        if (link) {
-            await link.click();
-        } else {
-            console.error("Notenspiegel konnte nicht gefunden werden");
+            const [link] = await page.$x("//a[contains(., 'Notenspiegel')]");
+            if (link) {
+                await link.click();
+            } else {
+                console.error("Notenspiegel konnte nicht gefunden werden");
+                await browser.close();
+            }
+            await page.waitForNavigation();
+            await page.waitForSelector("#notenspiegel");
+            const ret = await getObjectsFromTable(page);
+            return ret;
+        } catch (e){
+            return e;
+        }finally {
             await browser.close();
+            console.log("Closed Browser");
         }
-        await page.waitForNavigation();
-        await page.waitForSelector("#notenspiegel")
-        const ret = await getObjectsFromTable(page);
-        await browser.close();
-        return ret;
     },
 
     detectChanges: function (olds, news) {
