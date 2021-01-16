@@ -66,8 +66,7 @@ export default {
             }
             await page.waitForNavigation();
             await page.waitForSelector("#notenspiegel");
-            const ret = await getObjectsFromTable(page);
-            return ret;
+            return await getObjectsFromTable(page);
         } catch (e){
             return e;
         }finally {
