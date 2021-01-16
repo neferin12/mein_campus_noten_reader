@@ -3,9 +3,9 @@ Liest kontinuierlich die Noten von [Mein Campus](https://www.campus.uni-erlangen
 
 ## Installation
 ### Installieren der Abhängigkeiten
-````
-npm run install
-````
+```
+npm install
+```
 ### Konfiguration
 Kopieren der Datei .env.template nach .env   
 Anschließend die Felder in der .env Datei ausfüllen.
