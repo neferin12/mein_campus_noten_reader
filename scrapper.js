@@ -20,7 +20,7 @@ async function getObjectsFromTable(page) {
         let obj = {};
         for (let j = 0; j < keys.length; j++) {
             const key = keys[j];
-            obj[key] = (await (await tds[j].getProperty("innerHTML")).jsonValue()).trim().replace(/\n/g, "").replace(/\t/g, "");
+            obj[key] = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())?.trim().replace(/\n/g, "").replace(/\t/g, "");
         }
         objects.push(obj);
     }
