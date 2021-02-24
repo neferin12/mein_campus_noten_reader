@@ -6,24 +6,24 @@ dotenv.config();
 const env = process.env;
 let transporter = nodemailer.createTransport({
     host: env.SMTP_SERVER,
-    port:587,
+    port: 587,
     secure: false,
     auth: {
         user: env.SMTP_USER,
         pass: env.SMTP_PASSWORD
     },
     tls: {
-        requireTLS:true
+        requireTLS: true
     }
-},{
-    from: '"Notencrawler" '+env.SMTP_USER,
+}, {
+    from: '"Notencrawler" ' + env.SMTP_USER,
     to: env.MAILTO,
     priority: 'high'
 });
 
-function send (message) {
+function send(message) {
 
-    transporter.verify(function(error, success) {
+    transporter.verify(function (error, success) {
         if (error) {
             console.log(error);
         } else {
@@ -37,7 +37,7 @@ function sendTestmessage() {
         subject: "Test",
         html: "<p>Das ist eine <b>Testnachricht</b><br>Eingebettetes Bild:</p><img src='cid:attachmentImage@jp-studios.de'/>",
         attachments: [{
-            filename:"testimage.png",
+            filename: "testimage.png",
             path: "./testimage.png",
             cid: "attachmentImage@jp-studios.de"
         }]
@@ -56,7 +56,7 @@ function sendChangeNotice(entries) {
         html: html.join(""),
         attachments: [{
             filename: "notenspiegel.png",
-            path:"./notenspiegel.png",
+            path: "./notenspiegel.png",
             cid: "gradesummary@jp-studios.de"
         }]
     })
