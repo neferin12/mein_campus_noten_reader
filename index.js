@@ -11,10 +11,12 @@ function sleep(ms) {
 }
 
 (async () => {
+    // noinspection InfiniteLoopJS
     while (true) {
         try {
             console.log("Checking...");
             const ret = await scrapper.getData();
+            console.log("Got data");
             if (!(ret instanceof Error)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");
@@ -37,7 +39,7 @@ function sleep(ms) {
                 });
             } else {
                 console.error("Non Fatal Error:");
-                console.error(ret);
+                console.error(ret.name);
             }
         } catch (e){
             console.error(e);
