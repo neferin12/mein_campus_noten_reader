@@ -38,8 +38,7 @@ function sleep(ms) {
                     if (err) return console.log(err);
                 });
             } else {
-                console.error("Non Fatal Error:");
-                console.error(ret.name);
+                console.error("Non Fatal Error: "+ret.name);
             }
         } catch (e){
             console.error(e);
