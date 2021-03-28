@@ -38,7 +38,8 @@ export default {
 
         const browser = await puppeteer.launch({
             ...(DEBUG ? debugOptions : {}),
-            args: ['--lang=de-DE, de']
+            args: ['--lang=de-DE, de --no-sandbox'],
+            pipe: true
         });
 
         try {
