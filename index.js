@@ -34,9 +34,11 @@ function sleep(ms) {
                 }
 
                 console.log("Writing file");
-                fs.writeFile("out.json", JSON.stringify(ret), err => {
-                    if (err) return console.log(err);
-                });
+                if (ret) {
+                    fs.writeFile("out.json", JSON.stringify(ret), err => {
+                        if (err) return console.log(err);
+                    });
+                }
             } else {
                 console.error("Non Fatal Error: "+ret.name);
             }
