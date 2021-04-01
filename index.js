@@ -33,8 +33,8 @@ function sleep(ms) {
 
                 }
 
-                console.log("Writing file");
                 if (ret) {
+                    console.log("Writing file");
                     fs.writeFile("out.json", JSON.stringify(ret), err => {
                         if (err) return console.log(err);
                     });
