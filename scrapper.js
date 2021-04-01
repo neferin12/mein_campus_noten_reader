@@ -39,7 +39,8 @@ export default {
         const browser = await puppeteer.launch({
             ...(DEBUG ? debugOptions : {}),
             args: ['--lang=de-DE, de --no-sandbox'],
-            pipe: true
+            pipe: true,
+            executablePath: process.env.BROWSER ? process.env.BROWSER : undefined
         });
 
         try {
@@ -68,9 +69,9 @@ export default {
             await page.waitForNavigation();
             await page.waitForSelector("#notenspiegel");
             return await getObjectsFromTable(page);
-        } catch (e){
+        } catch (e) {
             return e;
-        }finally {
+        } finally {
             await browser.close();
             console.log("Closed Browser");
         }
