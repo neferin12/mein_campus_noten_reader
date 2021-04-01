@@ -64,7 +64,7 @@ export default {
                 await link.click();
             } else {
                 console.error("Notenspiegel konnte nicht gefunden werden");
-                await browser.close();
+                return null;
             }
             await page.waitForNavigation();
             await page.waitForSelector("#notenspiegel");
