@@ -17,7 +17,7 @@ function sleep(ms) {
             console.log("Checking...");
             const ret = await scrapper.getData();
             console.log("Got data");
-            if (!(ret instanceof Error)) {
+            if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");
                     const old = JSON.parse(fs.readFileSync("out.json", {encoding: 'utf8', flag: 'r'}));
