@@ -39,7 +39,7 @@ function sleep(ms) {
                         if (err) return console.log(err);
                     });
                 }
-            } else if(ret["name"]){
+            } else if(ret && ret["name"]){
                 console.error("Non Fatal Error: "+ret.name);
             }
         } catch (e){
