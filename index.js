@@ -1,6 +1,6 @@
 import fs from "fs";
 import dotenv from "dotenv"
-import scrapper from "./scrapper.js"
+import scrapper, {initScrapper} from "./scrapper.js"
 import sender from "./sender.js";
 dotenv.config();
 
@@ -10,12 +10,16 @@ function sleep(ms) {
     });
 }
 
+
+
 (async () => {
+    let puppet = await initScrapper();
+
     // noinspection InfiniteLoopJS
     while (true) {
         try {
             console.log("Checking...");
-            const ret = await scrapper.getData();
+            const ret = await scrapper.getData(puppet);
             console.log("Got data");
             if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
@@ -44,6 +48,8 @@ function sleep(ms) {
             }
         } catch (e){
             console.error(e);
+            await puppet.browser.close();
+            puppet = await initScrapper();
         }
 
         await sleep(60 * 1000);

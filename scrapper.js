@@ -27,34 +27,42 @@ async function getObjectsFromTable(page) {
     return objects;
 }
 
+export async function initScrapper() {
+    const DEBUG = false;
+
+    const debugOptions = {
+        headless: false,
+        slowMo: 100
+    };
+
+
+    const ret = {}
+    ret.browser = await puppeteer.launch({
+        ...(DEBUG ? debugOptions : {}),
+        args: ['--lang=de-DE,de --no-sandbox'],
+        pipe: true,
+        executablePath: process.env.BROWSER ? process.env.BROWSER : undefined
+    });
+    ret.page = await ret.browser.newPage();
+
+    return ret;
+}
+
+
 export default {
-    getData: async function () {
-        const DEBUG = false;
-
-        const debugOptions = {
-            headless: false,
-            slowMo: 100
-        };
-
-        const browser = await puppeteer.launch({
-            ...(DEBUG ? debugOptions : {}),
-            args: ['--lang=de-DE,de --no-sandbox'],
-            pipe: true,
-            executablePath: process.env.BROWSER ? process.env.BROWSER : undefined
-        });
-
+    getData: async function ({page}) {
         try {
-            const page = await browser.newPage();
             await page.goto('https://campus.fau.de');
-
             const loginButton = await page.$(".allInclusive > a");
-            await loginButton.click();
-            await page.waitForNavigation();
+            if (loginButton) {
+                await loginButton.click();
+                await page.waitForNavigation();
+                console.log("Logging in " + process.env.IDM_USERNAME);
+                await page.type("#username", process.env.IDM_USERNAME);
+                await page.type("#password", process.env.PASSWORD);
+                await page.click("#submit_button");
+            }
 
-            console.log("Logging in " + process.env.IDM_USERNAME);
-            await page.type("#username", process.env.IDM_USERNAME);
-            await page.type("#password", process.env.PASSWORD);
-            await page.click("#submit_button");
             await page.waitForSelector("#pruefungen");
 
             await page.click("#pruefungen");
@@ -71,9 +79,6 @@ export default {
             return await getObjectsFromTable(page);
         } catch (e) {
             return e;
-        } finally {
-            await browser.close();
-            console.log("Closed Browser");
         }
     },
 
