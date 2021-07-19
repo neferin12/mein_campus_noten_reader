@@ -3,10 +3,12 @@ import dotenv from "dotenv"
 import scrapper, {initScrapper} from "./scrapper"
 import sender from "./sender";
 import Notenspiegel from "./Notenspiegel";
-import { Logger } from "tslog";
-export const log: Logger = new Logger();
+import {Logger} from "tslog";
 
 dotenv.config();
+// @ts-ignore
+export const log: Logger = new Logger({minLevel: process.env.LOG_LEVEL | "info"});
+
 
 function sleep(ms): Promise<any> {
     return new Promise((resolve) => {
@@ -68,7 +70,7 @@ log.debug("Started");
         }
 
         // await sleep(60 * 1000);
-    }while (false)
+    } while (false)
     await puppet.browser.close();
 
 })();

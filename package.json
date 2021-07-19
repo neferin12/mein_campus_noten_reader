@@ -1,13 +1,12 @@
 {
   "name": "mein_campus_noten_reader",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "run": "node dist/index.js",
-    "develop": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "nodemon"
   },
   "keywords": [],
   "author": "Julian Pollinger",

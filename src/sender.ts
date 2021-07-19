@@ -52,11 +52,11 @@ function sendTestmessage() {
 
 function sendChangeNotice(entries: Array<Entry>) {
     let html = [];
-    html.push("<h4>Es wurden Änderungen gefunden:</h4><ul>");
+    html.push("<h3>Es gab eine Notenänderung</h3><h5>Geänderte Einträge:</h5><hr><ul>");
     for (const entry of entries) {
-        html.push(`<li><b>${entry["Prüfungstext"]}</b> (${entry["#"]}): <b>${entry["Note"]}</b></li>`)
+        html.push(`<li>${entry.toHTML()}</li>`)
     }
-    html.push("</ul><h5>Deine momentane Notenübersicht:</h5><img src='cid:gradesummary@jp-studios.de' alt='Notenübersicht'/>");
+    html.push("</ul><hr><h5>Deine momentane Notenübersicht:</h5><img src='cid:gradesummary@jp-studios.de' alt='Notenübersicht'/>");
     send({
         subject: "Notenänderung!",
         html: html.join(""),
