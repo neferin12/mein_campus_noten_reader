@@ -7,7 +7,7 @@ import {Logger} from "tslog";
 
 dotenv.config();
 // @ts-ignore
-export const log: Logger = new Logger({minLevel: process.env.LOG_LEVEL | "info"});
+export const log: Logger = new Logger({minLevel: process.env.LOG_LEVEL || "info"});
 
 
 function sleep(ms): Promise<any> {
