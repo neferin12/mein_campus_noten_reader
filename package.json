@@ -1,18 +1,30 @@
 {
   "name": "mein_campus_noten_reader",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "run": "node dist/index.js",
+    "develop": "nodemon"
   },
-  "type": "module",
   "keywords": [],
   "author": "Julian Pollinger",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
     "nodemailer": "^6.5.0",
-    "puppeteer": "^8.0.0"
+    "puppeteer": "^8.0.0",
+    "tslog": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.7",
+    "@types/nodemailer": "^6.4.4",
+    "nodemon": "^2.0.12",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.1.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5",
+    "webpack": "^5.45.1"
   }
 }

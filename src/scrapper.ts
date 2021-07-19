@@ -1,6 +1,17 @@
-import puppeteer from "puppeteer"
+import puppeteer, {Browser, Page} from "puppeteer"
+import {log} from "./index"
 
-async function getObjectsFromTable(page) {
+function normalize(s?: any, defaultVal:string=null): string | null {
+    if (s && typeof s === "string") {
+        return s.replace(/(<([^>]+)>)/gi, "").replace(/\n/g, "").replace(/\t/g, "").trim() || null;
+    } else if (s) {
+        return s;
+    } else {
+        return defaultVal;
+    }
+}
+
+async function getObjectsFromTable(page: Page): Promise<Array<object>> {
     const screenshotTable = await page.$('#notenspiegel');
     await screenshotTable.screenshot({path: 'notenspiegel.png'});
     let table = await page.$$("#notenspiegel tbody tr");
@@ -12,22 +23,29 @@ async function getObjectsFromTable(page) {
             head = abbr;
         }
         head = await (await head.getProperty('innerHTML')).jsonValue();
-        keys.push(head);
+        keys.push(normalize(head, 'noTitle'));
     }
     let objects = [];
     for (let i = 1; i < table.length; i++) {
         const tds = await table[i].$$("td");
         let obj = {};
+        obj['isExam'] = !!(await table[i].evaluate(el => window.getComputedStyle(el).background)).match(/0, 0, 0/)
         for (let j = 0; j < keys.length; j++) {
             const key = keys[j];
-            obj[key] = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())?.trim().replace(/\n/g, "").replace(/\t/g, "");
+            let temp = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())
+            obj[key] = normalize(temp);
         }
         objects.push(obj);
     }
     return objects;
 }
 
-export async function initScrapper() {
+interface Scrapper {
+    browser: Browser
+    page: Page
+}
+
+export async function initScrapper(): Promise<Scrapper> {
     const DEBUG = false;
 
     const debugOptions = {
@@ -36,7 +54,10 @@ export async function initScrapper() {
     };
 
 
-    const ret = {}
+    const ret: Scrapper = {
+        browser: null,
+        page: null
+    };
     ret.browser = await puppeteer.launch({
         ...(DEBUG ? debugOptions : {}),
         args: ['--lang=de-DE,de --no-sandbox'],
@@ -49,15 +70,19 @@ export async function initScrapper() {
 }
 
 
+interface getDataParams {
+    page: Page
+}
+
 export default {
-    getData: async function ({page}) {
+    getData: async function ({page}: getDataParams) {
         try {
             await page.goto('https://campus.fau.de');
             const loginButton = await page.$(".allInclusive > a");
             if (loginButton) {
                 await loginButton.click();
                 await page.waitForNavigation();
-                console.log("Logging in " + process.env.IDM_USERNAME);
+                log.debug("Logging in " + process.env.IDM_USERNAME);
                 await page.type("#username", process.env.IDM_USERNAME);
                 await page.type("#password", process.env.PASSWORD);
                 await page.click("#submit_button");
@@ -71,7 +96,7 @@ export default {
             if (link) {
                 await link.click();
             } else {
-                console.error("Notenspiegel konnte nicht gefunden werden");
+                log.warn("Notenspiegel konnte nicht gefunden werden");
                 return null;
             }
             await page.waitForNavigation();
@@ -80,9 +105,5 @@ export default {
         } catch (e) {
             return e;
         }
-    },
-
-    detectChanges: function (olds, news) {
-        return news.filter(item => !olds.map(obj => obj['#']).includes(item['#']));
     }
 }

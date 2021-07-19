@@ -1,5 +1,9 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import Mail from "nodemailer/lib/mailer";
+import Entry from "./Entry";
+import {log} from "./index";
 
 dotenv.config();
 
@@ -12,27 +16,25 @@ let transporter = nodemailer.createTransport({
         user: env.SMTP_USER,
         pass: env.SMTP_PASSWORD
     },
-    tls: {
-        requireTLS: true
-    }
+    requireTLS: true
 }, {
     from: '"Notencrawler" ' + env.SMTP_USER,
     to: env.MAILTO,
     priority: 'high'
 });
 
-function send(message) {
-    if (env.ENABLE_MAILING !== "false") {
+function send(message: Mail.Options, force: boolean = false) {
+    if (env.ENABLE_MAILING !== "false" || force) {
         transporter.verify(function (error, success) {
             if (error) {
-                console.log(error);
+                log.error(error);
             } else {
-                transporter.sendMail(message)
+                transporter.sendMail(message).then(() => log.info("Mail versendet")).catch(e => log.error(e));
             }
         });
 
     } else {
-        console.error("Keine Mail versendet (deaktiviert)")
+       log.info("Keine Mail versendet (deaktiviert)")
     }
 }
 
@@ -45,16 +47,16 @@ function sendTestmessage() {
             path: "./testimage.png",
             cid: "attachmentImage@jp-studios.de"
         }]
-    })
+    }, true)
 }
 
-function sendChangeNotice(entries) {
+function sendChangeNotice(entries: Array<Entry>) {
     let html = [];
-    html.push("<h4>Diese Prüfungen wurden hinzugefügt:</h4><ul>");
+    html.push("<h3>Es gab eine Notenänderung</h3><h5>Geänderte Einträge:</h5><hr><ul>");
     for (const entry of entries) {
-        html.push(`<li><b>${entry["Prüfungstext"]}</b> (${entry["#"]}): <b>${entry["Note"]}</b></li>`)
+        html.push(`<li>${entry.toHTML()}</li>`)
     }
-    html.push("</ul><h5>Deine momentane Notenübersicht:</h5><img src='cid:gradesummary@jp-studios.de' alt='Notenübersicht'/>");
+    html.push("</ul><hr><h5>Deine momentane Notenübersicht:</h5><img src='cid:gradesummary@jp-studios.de' alt='Notenübersicht'/>");
     send({
         subject: "Notenänderung!",
         html: html.join(""),
