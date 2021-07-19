@@ -2,7 +2,7 @@
   "name": "mein_campus_noten_reader",
   "version": "1.0.0",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,5 +14,11 @@
     "dotenv": "^8.2.0",
     "nodemailer": "^6.5.0",
     "puppeteer": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.7",
+    "ts-node": "^10.1.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
   }
 }

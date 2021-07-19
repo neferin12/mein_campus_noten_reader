@@ -1,6 +1,6 @@
-import puppeteer from "puppeteer"
+import puppeteer, {Browser, Page} from "puppeteer"
 
-async function getObjectsFromTable(page) {
+async function getObjectsFromTable(page: Page): Promise<Array<object>> {
     const screenshotTable = await page.$('#notenspiegel');
     await screenshotTable.screenshot({path: 'notenspiegel.png'});
     let table = await page.$$("#notenspiegel tbody tr");
@@ -20,14 +20,23 @@ async function getObjectsFromTable(page) {
         let obj = {};
         for (let j = 0; j < keys.length; j++) {
             const key = keys[j];
-            obj[key] = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())?.trim().replace(/\n/g, "").replace(/\t/g, "");
+            let temp = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())
+            if (typeof temp === "string") {
+                temp = temp?.trim().replace(/\n/g, "").replace(/\t/g, "");
+            }
+            obj[key] = temp;
         }
         objects.push(obj);
     }
     return objects;
 }
 
-export async function initScrapper() {
+interface Scrapper {
+    browser: Browser
+    page: Page
+}
+
+export async function initScrapper(): Promise<Scrapper> {
     const DEBUG = false;
 
     const debugOptions = {
@@ -36,7 +45,10 @@ export async function initScrapper() {
     };
 
 
-    const ret = {}
+    const ret: Scrapper = {
+        browser: null,
+        page: null
+    };
     ret.browser = await puppeteer.launch({
         ...(DEBUG ? debugOptions : {}),
         args: ['--lang=de-DE,de --no-sandbox'],
@@ -49,8 +61,12 @@ export async function initScrapper() {
 }
 
 
+interface getDataParams {
+    page: Page
+}
+
 export default {
-    getData: async function ({page}) {
+    getData: async function ({page}: getDataParams) {
         try {
             await page.goto('https://campus.fau.de');
             const loginButton = await page.$(".allInclusive > a");

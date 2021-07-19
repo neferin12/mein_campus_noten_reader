@@ -4,7 +4,7 @@ import scrapper, {initScrapper} from "./scrapper.js"
 import sender from "./sender.js";
 dotenv.config();
 
-function sleep(ms) {
+function sleep(ms): Promise<any> {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
@@ -21,6 +21,7 @@ function sleep(ms) {
             console.log("Checking...");
             const ret = await scrapper.getData(puppet);
             console.log("Got data");
+            const notenspiegel = new Notenspiegel(ret);
             if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");

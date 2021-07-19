@@ -11,8 +11,8 @@ Kopieren der Datei .env.template nach .env
 Anschließend die Felder in der .env Datei ausfüllen.
 
 ### Testen
-Zum Testen der Maileinstellungen ``node mailtest.js`` ausführen. 
+Zum Testen der Maileinstellungen ``node mailtest.ts`` ausführen. 
 
 ### Ausführen
-Zum Ausführen des Readers ``node index.js `` ausführen.  
+Zum Ausführen des Readers ``node index.ts `` ausführen.  
 Für längerfristige Ausführung empfehle ich [pm2](https://pm2.io/).
