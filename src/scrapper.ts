@@ -1,5 +1,15 @@
 import puppeteer, {Browser, Page} from "puppeteer"
 
+function normalize(s?: any, defaultVal:string=null): string | null {
+    if (s && typeof s === "string") {
+        return s.replace(/(<([^>]+)>)/gi, "").replace(/\n/g, "").replace(/\t/g, "").trim();
+    } else if (s) {
+        return s;
+    } else {
+        return defaultVal;
+    }
+}
+
 async function getObjectsFromTable(page: Page): Promise<Array<object>> {
     const screenshotTable = await page.$('#notenspiegel');
     await screenshotTable.screenshot({path: 'notenspiegel.png'});
@@ -12,7 +22,7 @@ async function getObjectsFromTable(page: Page): Promise<Array<object>> {
             head = abbr;
         }
         head = await (await head.getProperty('innerHTML')).jsonValue();
-        keys.push(head);
+        keys.push(normalize(head, 'noTitle'));
     }
     let objects = [];
     for (let i = 1; i < table.length; i++) {
@@ -21,10 +31,7 @@ async function getObjectsFromTable(page: Page): Promise<Array<object>> {
         for (let j = 0; j < keys.length; j++) {
             const key = keys[j];
             let temp = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())
-            if (typeof temp === "string") {
-                temp = temp?.trim().replace(/\n/g, "").replace(/\t/g, "");
-            }
-            obj[key] = temp;
+            obj[key] = normalize(temp);
         }
         objects.push(obj);
     }
