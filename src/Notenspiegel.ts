@@ -36,7 +36,6 @@ export default class Notenspiegel {
                 res.push(allElement)
             }
         }
-        console.log(res)
         return res;
     }
 
