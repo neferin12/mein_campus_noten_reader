@@ -22,14 +22,18 @@ let transporter = nodemailer.createTransport({
 });
 
 function send(message) {
+    if (env.ENABLE_MAILING !== "false") {
+        transporter.verify(function (error, success) {
+            if (error) {
+                console.log(error);
+            } else {
+                transporter.sendMail(message)
+            }
+        });
 
-    transporter.verify(function (error, success) {
-        if (error) {
-            console.log(error);
-        } else {
-            transporter.sendMail(message)
-        }
-    });
+    } else {
+        console.error("Keine Mail versendet (deaktiviert)")
+    }
 }
 
 function sendTestmessage() {
