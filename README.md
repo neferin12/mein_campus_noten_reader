@@ -1,3 +1,4 @@
+[![Node.js CI](https://github.com/neferin12/mein_campus_noten_reader/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/neferin12/mein_campus_noten_reader/actions/workflows/node.js.yml)
 # Mein Campus Noten Reader
 Liest kontinuierlich die Noten von [Mein Campus](https://www.campus.uni-erlangen.de/) und sendet eine E-Mail, wenn neue Noten dazukommen
 
