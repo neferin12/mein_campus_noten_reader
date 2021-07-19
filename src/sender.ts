@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import Mail from "nodemailer/lib/mailer";
 
 dotenv.config();
 
@@ -12,17 +14,15 @@ let transporter = nodemailer.createTransport({
         user: env.SMTP_USER,
         pass: env.SMTP_PASSWORD
     },
-    tls: {
-        requireTLS: true
-    }
+    requireTLS: true
 }, {
     from: '"Notencrawler" ' + env.SMTP_USER,
     to: env.MAILTO,
     priority: 'high'
 });
 
-function send(message) {
-    if (env.ENABLE_MAILING !== "false") {
+function send(message: Mail.Options, force: boolean = false) {
+    if (env.ENABLE_MAILING !== "false" || force) {
         transporter.verify(function (error, success) {
             if (error) {
                 console.log(error);
@@ -45,7 +45,7 @@ function sendTestmessage() {
             path: "./testimage.png",
             cid: "attachmentImage@jp-studios.de"
         }]
-    })
+    }, true)
 }
 
 function sendChangeNotice(entries) {

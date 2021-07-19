@@ -2,11 +2,13 @@
   "name": "mein_campus_noten_reader",
   "version": "1.0.0",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
+    "run": "node dist/index.js",
+    "develop": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "keywords": [],
   "author": "Julian Pollinger",
   "license": "MIT",
@@ -17,8 +19,12 @@
   },
   "devDependencies": {
     "@types/node": "^14.14.7",
+    "@types/nodemailer": "^6.4.4",
+    "nodemon": "^2.0.12",
+    "ts-loader": "^9.2.3",
     "ts-node": "^10.1.0",
     "tslib": "^2.3.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "webpack": "^5.45.1"
   }
 }

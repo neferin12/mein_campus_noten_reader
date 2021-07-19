@@ -1,7 +1,8 @@
 import fs from "fs";
 import dotenv from "dotenv"
-import scrapper, {initScrapper} from "./scrapper.js"
-import sender from "./sender.js";
+import scrapper, {initScrapper} from "./scrapper"
+import sender from "./sender";
+import Notenspiegel from "./Notenspiegel";
 dotenv.config();
 
 function sleep(ms): Promise<any> {
@@ -21,7 +22,7 @@ function sleep(ms): Promise<any> {
             console.log("Checking...");
             const ret = await scrapper.getData(puppet);
             console.log("Got data");
-            const notenspiegel = new Notenspiegel(ret);
+            const n = new Notenspiegel(ret);
             if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");

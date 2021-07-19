@@ -1,4 +1,6 @@
-class Notenspiegel {
+import Entry from "./Entry";
+
+export default class Notenspiegel {
     private besondereEintrage: Array<Entry>
     private entries: Array<Entry>
 

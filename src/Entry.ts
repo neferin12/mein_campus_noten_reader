@@ -7,7 +7,7 @@ enum Bestehen {
     durchgefallen
 }
 
-abstract class Entry {
+export default abstract class Entry {
     /**
      * Originale String des Eintrags
      * @private
@@ -46,7 +46,7 @@ abstract class Entry {
 }
 
 
-class Modul extends Entry {
+export class Modul extends Entry {
     /**
      * Die Einträge eines Modules
      * @private
@@ -54,7 +54,7 @@ class Modul extends Entry {
     private entries: Array<Entry>;
 }
 
-class Pruefung extends Entry {
+export class Pruefung extends Entry {
 
     /**
      * Semester der Prüfung
