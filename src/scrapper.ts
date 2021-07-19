@@ -2,7 +2,7 @@ import puppeteer, {Browser, Page} from "puppeteer"
 
 function normalize(s?: any, defaultVal:string=null): string | null {
     if (s && typeof s === "string") {
-        return s.replace(/(<([^>]+)>)/gi, "").replace(/\n/g, "").replace(/\t/g, "").trim();
+        return s.replace(/(<([^>]+)>)/gi, "").replace(/\n/g, "").replace(/\t/g, "").trim() || null;
     } else if (s) {
         return s;
     } else {
@@ -28,6 +28,7 @@ async function getObjectsFromTable(page: Page): Promise<Array<object>> {
     for (let i = 1; i < table.length; i++) {
         const tds = await table[i].$$("td");
         let obj = {};
+        obj['isExam'] = !!(await table[i].evaluate(el => window.getComputedStyle(el).background)).match(/0, 0, 0/)
         for (let j = 0; j < keys.length; j++) {
             const key = keys[j];
             let temp = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())

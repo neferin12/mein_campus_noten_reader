@@ -22,7 +22,13 @@ function sleep(ms): Promise<any> {
             console.log("Checking...");
             const ret = await scrapper.getData(puppet);
             console.log("Got data");
-            const n = new Notenspiegel(ret);
+            try {
+                const notenspiegel = new Notenspiegel(ret);
+            } catch (e){
+                console.error(e);
+                console.error("Trying again...")
+                continue;
+            }
             if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");
