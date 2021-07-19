@@ -10,9 +10,13 @@ npm install
 Kopieren der Datei .env.template nach .env   
 Anschließend die Felder in der .env Datei ausfüllen.
 
+### Builden
+```
+npm run build
+```
 ### Testen
-Zum Testen der Maileinstellungen ``node mailtest.ts`` ausführen. 
+Zum Testen der Maileinstellungen ``node dist/mailtest.js`` ausführen. 
 
 ### Ausführen
-Zum Ausführen des Readers ``node index.ts `` ausführen.  
+Zum Ausführen des Readers ``node dist/index.js `` ausführen.  
 Für längerfristige Ausführung empfehle ich [pm2](https://pm2.io/).

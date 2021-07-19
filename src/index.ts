@@ -69,8 +69,8 @@ log.debug("Started");
             puppet = await initScrapper();
         }
 
-        // await sleep(60 * 1000);
-    } while (false)
-    await puppet.browser.close();
+        await sleep(60 * 1000);
+    } while (true)
+    // await puppet.browser.close();
 
 })();
