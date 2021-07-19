@@ -1,4 +1,5 @@
 import Entry, {ModulTypes} from "./Entry";
+import {log} from "./index";
 
 function isIterable(obj) {
     // checks for null and undefined
@@ -16,7 +17,6 @@ export default class Notenspiegel {
 
     constructor(data: Array<Record<string, string| null>>) {
         if (!isIterable(data)) {
-            console.error(data);
             throw new Error("Data is not iterable");
         }
         this._besondereEintrage = Entry.getModules(data, ModulTypes.special);

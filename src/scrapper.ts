@@ -1,4 +1,5 @@
 import puppeteer, {Browser, Page} from "puppeteer"
+import {log} from "./index"
 
 function normalize(s?: any, defaultVal:string=null): string | null {
     if (s && typeof s === "string") {
@@ -81,7 +82,7 @@ export default {
             if (loginButton) {
                 await loginButton.click();
                 await page.waitForNavigation();
-                console.log("Logging in " + process.env.IDM_USERNAME);
+                log.debug("Logging in " + process.env.IDM_USERNAME);
                 await page.type("#username", process.env.IDM_USERNAME);
                 await page.type("#password", process.env.PASSWORD);
                 await page.click("#submit_button");
@@ -95,7 +96,7 @@ export default {
             if (link) {
                 await link.click();
             } else {
-                console.error("Notenspiegel konnte nicht gefunden werden");
+                log.warn("Notenspiegel konnte nicht gefunden werden");
                 return null;
             }
             await page.waitForNavigation();

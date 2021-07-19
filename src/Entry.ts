@@ -125,6 +125,7 @@ export default abstract class Entry {
         return res;
     }
 
+    abstract toHTML(): string;
 
     get special(): boolean {
         return this._special;
@@ -179,6 +180,15 @@ export class Modul extends Entry {
     get entries(): Array<Entry> {
         return this._entries;
     }
+
+    toHTML() {
+        let html = `<h6>Modul: ${this.name}</h6><ul>`;
+        for (const entry of this.entries) {
+            html+=`<li>${entry.toHTML()}</li>`
+        }
+        html+='</ul>'
+        return html;
+    }
 }
 
 export class Pruefung extends Entry {
@@ -219,5 +229,9 @@ export class Pruefung extends Entry {
 
     get versuch(): number {
         return this._versuch;
+    }
+
+    toHTML(): string {
+        return `<b>${this.name}</b> (${this.id}): <b>${this.note}</b> ${this.status === Bestehen.bestanden ? '&#9989;' : (this.status === Bestehen.durchgefallen ? '&#10060;' : '')}`;
     }
 }

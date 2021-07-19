@@ -2,6 +2,8 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import Mail from "nodemailer/lib/mailer";
+import Entry from "./Entry";
+import {log} from "./index";
 
 dotenv.config();
 
@@ -25,14 +27,14 @@ function send(message: Mail.Options, force: boolean = false) {
     if (env.ENABLE_MAILING !== "false" || force) {
         transporter.verify(function (error, success) {
             if (error) {
-                console.log(error);
+                log.error(error);
             } else {
-                transporter.sendMail(message)
+                transporter.sendMail(message).then(() => log.info("Mail versendet")).catch(e => log.error(e));
             }
         });
 
     } else {
-        console.error("Keine Mail versendet (deaktiviert)")
+       log.info("Keine Mail versendet (deaktiviert)")
     }
 }
 
@@ -48,9 +50,9 @@ function sendTestmessage() {
     }, true)
 }
 
-function sendChangeNotice(entries) {
+function sendChangeNotice(entries: Array<Entry>) {
     let html = [];
-    html.push("<h4>Diese Prüfungen wurden hinzugefügt:</h4><ul>");
+    html.push("<h4>Es wurden Änderungen gefunden:</h4><ul>");
     for (const entry of entries) {
         html.push(`<li><b>${entry["Prüfungstext"]}</b> (${entry["#"]}): <b>${entry["Note"]}</b></li>`)
     }
