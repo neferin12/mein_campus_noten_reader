@@ -1,10 +1,19 @@
 /**
  * Enum über den Status eines Eintrags
  */
-enum Bestehen {
+export enum Bestehen {
     nichts,
     bestanden,
     durchgefallen
+}
+
+/**
+ * Enum für die Auswahl, welche Modelle geparst werden sollen
+ */
+export enum ModulTypes {
+    notSpecial,
+    special,
+    all
 }
 
 export default abstract class Entry {
@@ -19,15 +28,15 @@ export default abstract class Entry {
             const dateParts = data['Prüfungsdatum'].split(".");
             this._datum = new Date(parseInt(dateParts[2]), parseInt(dateParts[1]) - 1, parseInt(dateParts[0]));
         }
-        this._vorlauefig = !!data.Note?.match(/\*/);
-        if (this._note <= 4 || data.Status) {
+        this._vorlauefig = !!data["Note"]?.match(/\*/);
+        if (this._note <= 4 || data["Status"]) {
             this._status = Bestehen.bestanden;
-        } else if (data.Status === null) {
+        } else if (data["Status"] === null) {
             this._status = Bestehen.nichts;
         } else {
             this._status = Bestehen.durchgefallen;
         }
-        this._ects = parseFloat(data.ECTS?.replace(",", "."));
+        this._ects = parseFloat(data["ECTS"]?.replace(",", "."));
     }
 
     /**
@@ -78,39 +87,41 @@ export default abstract class Entry {
      */
     private readonly _ects: number
 
-    public static getSpecialEntries(ar: Array<Record<string, string | null>>): Array<Entry> {
-        const special = [];
-        for (const datum of ar) {
-            const p = Entry.createEntry(datum);
-            if (p.special) {
-                special.push(p);
-            }
-        }
-        return special
-    }
-
     public static createEntry(data: Record<string, string | null>): Entry {
         return data.isExam ? new Pruefung(data) : new Modul(data);
     }
 
-    public static getModules(array: Array<Record<string, string | null>>): Array<Entry> {
+    public static getModules(array: Array<Record<string, string | null>>, special = ModulTypes.notSpecial): Array<Entry> {
         const res = [];
-        let lastModule: Modul = null;
-        for (let i = 0; i < array.length; i++) {
-            const p = Entry.createEntry(array[i]);
-            if (!p.special) {
-                if (p instanceof Modul) {
-                    lastModule = p;
+        //Füge besondere hinzu
+        if (special !== ModulTypes.notSpecial) {
+            for (const datum of array) {
+                const p = Entry.createEntry(datum);
+                if (p.special) {
                     res.push(p);
-                } else {
-                    if (lastModule) {
-                        lastModule.addEntry(p);
-                    } else {
+                }
+            }
+        }
+        //Füge nicht besondere hinzu
+        if (special !== ModulTypes.special) {
+            let lastModule: Modul = null;
+            for (let i = 0; i < array.length; i++) {
+                const p = Entry.createEntry(array[i]);
+                if (!p.special) {
+                    if (p instanceof Modul) {
+                        lastModule = p;
                         res.push(p);
+                    } else {
+                        if (lastModule) {
+                            lastModule.addEntry(p);
+                        } else {
+                            res.push(p);
+                        }
                     }
                 }
             }
         }
+
         return res;
     }
 

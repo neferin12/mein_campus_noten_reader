@@ -1,4 +1,4 @@
-import Entry from "./Entry";
+import Entry, {ModulTypes} from "./Entry";
 
 function isIterable(obj) {
     // checks for null and undefined
@@ -9,8 +9,9 @@ function isIterable(obj) {
 }
 
 export default class Notenspiegel {
-    private readonly besondereEintrage: Array<Entry> = []
-    private readonly entries: Array<Entry> = []
+    private readonly _besondereEintrage: Array<Entry>;
+    private readonly _entries: Array<Entry>;
+    private readonly _all: Array<Entry>;
 
 
     constructor(data: Array<Record<string, string| null>>) {
@@ -18,10 +19,37 @@ export default class Notenspiegel {
             console.error(data);
             throw new Error("Data is not iterable");
         }
-        this.besondereEintrage = Entry.getSpecialEntries(data);
-        this.entries = Entry.getModules(data);
+        this._besondereEintrage = Entry.getModules(data, ModulTypes.special);
+        this._entries = Entry.getModules(data);
+        this._all = Entry.getModules(data, ModulTypes.all);
+    }
 
-        console.log(this.besondereEintrage)
-        console.log(this.entries)
+    public findDifferences(old: Array<Record<string, any>>): Array<Entry> {
+        const res: Array<Entry> = [];
+        for (const allElement of this._all) {
+            const oldEl = old.filter(el => el._id === allElement.id)[0];
+            if (!oldEl) {
+                if (!isNaN(allElement.id)) {
+                    res.push(allElement);
+                }
+            }else if (JSON.stringify(oldEl) !== JSON.stringify(allElement)) {
+                res.push(allElement)
+            }
+        }
+        console.log(res)
+        return res;
+    }
+
+
+    get besondereEintrage(): Array<Entry> {
+        return this._besondereEintrage;
+    }
+
+    get entries(): Array<Entry> {
+        return this._entries;
+    }
+
+    get all(): Array<Entry> {
+        return this._all;
     }
 }

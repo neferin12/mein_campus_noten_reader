@@ -11,20 +11,24 @@ function sleep(ms): Promise<any> {
     });
 }
 
+process.on('SIGTERM', () => process.exit());
 
+
+console.log("Started");
 
 (async () => {
     let puppet = await initScrapper();
 
     // noinspection InfiniteLoopJS
-    while (true) {
+    do {
         try {
             console.log("Checking...");
             const ret = await scrapper.getData(puppet);
             console.log("Got data");
+            let notenspiegel: Notenspiegel;
             try {
-                const notenspiegel = new Notenspiegel(ret);
-            } catch (e){
+                notenspiegel = new Notenspiegel(ret);
+            } catch (e) {
                 console.error(e);
                 console.error("Trying again...")
                 continue;
@@ -32,34 +36,36 @@ function sleep(ms): Promise<any> {
             if (!(ret instanceof Error || !ret)) {
                 if (fs.existsSync("./out.json")) {
                     console.log("Reading old data");
-                    const old = JSON.parse(fs.readFileSync("out.json", {encoding: 'utf8', flag: 'r'}));
+                    const oldJson = JSON.parse(fs.readFileSync("out.json", {encoding: 'utf8', flag: 'r'}));
 
-                    const difference = scrapper.detectChanges(old, ret);
-
-                    if (difference.length > 0) {
+                    // const difference = scrapper.detectChanges(old, ret);
+                    const differences = notenspiegel.findDifferences(oldJson);
+                    if (differences.length > 0) {
                         console.log("Differences found")
-                        sender.sendChangeNotice(difference);
+                        sender.sendChangeNotice(differences);
                     } else {
                         console.log("No differences");
                     }
 
                 }
 
-                if (ret) {
+                if (notenspiegel) {
                     console.log("Writing file");
-                    fs.writeFile("out.json", JSON.stringify(ret), err => {
+                    fs.writeFile("out.json", JSON.stringify(notenspiegel.all), err => {
                         if (err) return console.log(err);
                     });
                 }
-            } else if(ret && ret["name"]){
-                console.error("Non Fatal Error: "+ret.name);
+            } else if (ret && ret["name"]) {
+                console.error("Non Fatal Error: " + ret.name);
             }
-        } catch (e){
+        } catch (e) {
             console.error(e);
             await puppet.browser.close();
             puppet = await initScrapper();
         }
 
-        await sleep(60 * 1000);
-    }
+        // await sleep(60 * 1000);
+    }while (false)
+    await puppet.browser.close();
+
 })();

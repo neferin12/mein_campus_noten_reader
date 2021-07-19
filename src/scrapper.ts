@@ -104,9 +104,5 @@ export default {
         } catch (e) {
             return e;
         }
-    },
-
-    detectChanges: function (olds, news) {
-        return news.filter(item => !olds.map(obj => obj['#']).includes(item['#']));
     }
 }
