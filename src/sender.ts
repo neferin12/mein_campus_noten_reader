@@ -52,7 +52,7 @@ function sendTestmessage() {
 
 function sendChangeNotice(entries: Array<Entry>) {
     let html = [];
-    html.push("<h3>Es gab eine Notenänderung</h3><h5>Geänderte Einträge:</h5><hr><ul>");
+    html.push("<h3>Es gab eine Notenänderung</h3><hr><h5>Geänderte Einträge:</h5><ul>");
     for (const entry of entries) {
         html.push(`<li>${entry.toHTML()}</li>`)
     }
