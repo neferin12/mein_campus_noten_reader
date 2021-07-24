@@ -31,6 +31,8 @@ export default abstract class Entry {
         this._vorlauefig = !!data["Note"]?.match(/\*/);
         if ((this._note <= 4 && this._note !== null) || data["Status"] === "bestanden") {
             this._status = Bestehen.bestanden;
+        } else if (this._note > 4) {
+            this._status = Bestehen.durchgefallen;
         } else if (data["Status"] === null) {
             this._status = Bestehen.nichts;
         } else {
