@@ -1,9 +1,9 @@
 import fs from "fs";
 import dotenv from "dotenv"
-import scrapper, {initScrapper} from "./scrapper"
 import sender from "./sender";
 import Notenspiegel from "./Notenspiegel";
 import {Logger} from "tslog";
+import Scrapper from "./Scrapper";
 
 dotenv.config();
 // @ts-ignore
@@ -22,13 +22,13 @@ process.on('SIGTERM', () => process.exit());
 log.debug("Started");
 
 (async () => {
-    let puppet = await initScrapper();
+    let puppet = await Scrapper.initScrapper();
 
     // noinspection InfiniteLoopJS
     do {
         try {
             log.info("Checking...");
-            const ret = await scrapper.getData(puppet);
+            const ret = await Scrapper.timeout(30000, () => puppet.getData());
             log.debug("Got data");
             let notenspiegel: Notenspiegel;
             try {
@@ -38,7 +38,7 @@ log.debug("Started");
                 log.debug("Trying again...")
                 continue;
             }
-            if (!(ret instanceof Error || !ret)) {
+            if (ret) {
                 if (fs.existsSync("./out.json")) {
                     log.debug("Reading old data");
                     const oldJson = JSON.parse(fs.readFileSync("out.json", {encoding: 'utf8', flag: 'r'}));
@@ -60,17 +60,15 @@ log.debug("Started");
                         if (err) log.error(err);
                     });
                 }
-            } else if (ret && ret["name"]) {
-                log.error("Non Fatal Error: " + ret.name);
             }
         } catch (e) {
             log.error(e);
-            await puppet.browser.close();
-            puppet = await initScrapper();
+            puppet = await Scrapper.initScrapper();
         }
 
         await sleep(60 * 1000);
     } while (true)
-    // await puppet.browser.close();
+    // noinspection UnreachableCodeJS
+    await puppet.close();
 
 })();
