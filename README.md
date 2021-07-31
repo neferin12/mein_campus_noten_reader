@@ -13,7 +13,7 @@ npm install
 Kopieren der Datei .env.template nach .env   
 Anschließend die Felder in der .env Datei ausfüllen.
 
-### Builden
+### Build
 ```
 npm run build
 ```
