@@ -39,6 +39,9 @@ export default class Notenspiegel {
         return res;
     }
 
+    get length(): number {
+        return this._all.length;
+    }
 
     get besondereEintrage(): Array<Entry> {
         return this._besondereEintrage;

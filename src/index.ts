@@ -42,7 +42,10 @@ log.debug("Started");
                 if (fs.existsSync("./out.json")) {
                     log.debug("Reading old data");
                     const oldJson = JSON.parse(fs.readFileSync("out.json", {encoding: 'utf8', flag: 'r'}));
-
+                    if (oldJson.length/2 > notenspiegel.length) {
+                        log.debug("Found invalid data (too few entries)");
+                        continue;
+                    }
                     // const difference = scrapper.detectChanges(old, ret);
                     const differences = notenspiegel.findDifferences(oldJson);
                     if (differences.length > 0) {
