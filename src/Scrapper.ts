@@ -1,5 +1,5 @@
 import puppeteer, {Browser, Page} from "puppeteer"
-import {log} from "./index"
+import {log} from "./Logger"
 
 /**
  * The Scrapper to read from meinCampus

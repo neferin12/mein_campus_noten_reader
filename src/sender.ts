@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import Mail from "nodemailer/lib/mailer";
 import Entry from "./Entry";
-import {log} from "./index";
+import {log} from "./Logger";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import Entry, {ModulTypes} from "./Entry";
-import {log} from "./index";
+import {log} from "./Logger";
 
 function isIterable(obj) {
     // checks for null and undefined

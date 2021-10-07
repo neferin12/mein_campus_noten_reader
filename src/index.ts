@@ -3,12 +3,12 @@ import fs from "fs";
 import dotenv from "dotenv"
 import sender from "./sender";
 import Notenspiegel from "./Notenspiegel";
-import {Logger} from "tslog";
 import Scrapper from "./Scrapper";
+import {log} from "./Logger";
 
 dotenv.config();
-// @ts-ignore
-export const log: Logger = new Logger({minLevel: process.env.LOG_LEVEL || "info"});
+
+
 
 
 function sleep(ms): Promise<any> {
