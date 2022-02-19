@@ -27,8 +27,14 @@ export default class Scrapper {
 
         const browser = await puppeteer.launch({
             ...(DEBUG ? debugOptions : {}),
-            args: ['--lang=de-DE,de --no-sandbox'],
-            pipe: true,
+            args: [
+                '--lang=de-DE,de',
+                "--disable-gpu",
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--single-process'
+            ],
             executablePath: process.env.BROWSER ? process.env.BROWSER : undefined
         });
 
@@ -56,7 +62,7 @@ export default class Scrapper {
      * @param time the time after which the execution is canceled
      * @param f the function
      */
-    static timeout(time: number, f: () => Promise<any>):Promise<any> {
+    static timeout(time: number, f: () => Promise<any>): Promise<any> {
         return new Promise((resolve, reject) => {
             const timer = setTimeout(() => reject("Promise timed out"), time);
             f().then(resolve).catch(reject).finally(() => clearTimeout(timer));
@@ -66,7 +72,7 @@ export default class Scrapper {
     /**
      * Pulls the actual data from meinCampus
      */
-    getData(): Promise<Array<Record<string, string| null>>|null> {
+    getData(): Promise<Array<Record<string, string | null>> | null> {
         const page = this.page;
         return new Promise(async (resolve, reject) => {
             try {
@@ -123,7 +129,7 @@ export default class Scrapper {
      * Parses the lines in the html table to objects
      * @private
      */
-    private async getObjectsFromTable(): Promise<Array<Record<string, string| null>>> {
+    private async getObjectsFromTable(): Promise<Array<Record<string, string | null>>> {
         const page = this.page;
         const screenshotTable = await page.$('#notenspiegel');
         await screenshotTable.screenshot({path: 'notenspiegel.png'});
@@ -135,7 +141,7 @@ export default class Scrapper {
             if (abbr) {
                 head = abbr;
             }
-            head = await(await head.getProperty('innerHTML')).jsonValue();
+            head = await (await head.getProperty('innerHTML')).jsonValue();
             keys.push(Scrapper.normalize(head, 'noTitle'));
         }
         let objects = [];
@@ -145,7 +151,7 @@ export default class Scrapper {
             obj['isExam'] = !!(await table[i].evaluate(el => window.getComputedStyle(el).background)).match(/0, 0, 0/)
             for (let j = 0; j < keys.length; j++) {
                 const key = keys[j];
-                let temp = (await(await tds[j]?.getProperty("innerHTML"))?.jsonValue())
+                let temp = (await (await tds[j]?.getProperty("innerHTML"))?.jsonValue())
                 obj[key] = Scrapper.normalize(temp);
             }
             objects.push(obj);
