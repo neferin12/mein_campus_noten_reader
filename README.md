@@ -4,6 +4,12 @@
 # Mein Campus Noten Reader
 Liest kontinuierlich die Noten von [Mein Campus](https://www.campus.uni-erlangen.de/) und sendet eine E-Mail, wenn neue Noten dazukommen
 
+## Nutzung mit Docker
+```bash
+docker pull ghcr.io/neferin12/mein_campus_noten_reader:master
+```
+Beim Ausführen müssen die in .env.template Umgebungsvariablen (ausgenommen BROWSER) definiert werden.
+
 ## Installation
 ### Installieren der Abhängigkeiten
 ```
