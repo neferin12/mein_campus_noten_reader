@@ -16,7 +16,8 @@ RUN pnpm install
 
 # RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
 
-COPY . .
+COPY src src
+COPY tsconfig.json .
 
 RUN pnpm run build
 

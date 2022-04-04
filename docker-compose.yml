@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  campus-reader:
+    build: 
+      dockerfile: ./Dockerfile
+    image: ghcr.io/neferin12/mein_campus_noten_reader:master
+    container_name: mein_campus_noten_reader
+    environment:
+      IDM_USERNAME: ${IDM_USERNAME}
+      PASSWORD: ${PASSWORD}
+      MAILTO: ${MAILTO}
+      SMTP_SERVER: ${SMTP_SERVER}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      ENABLE_MAILING: ${ENABLE_MAILING}
+      LOG_LEVEL: ${LOG_LEVEL}
+    
