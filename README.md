@@ -6,7 +6,7 @@ Liest kontinuierlich die Noten von [Mein Campus](https://www.campus.uni-erlangen
 
 ## Nutzung mit Docker
 ```bash
-docker pull ghcr.io/neferin12/mein_campus_noten_reader:master
+docker pull ghcr.io/neferin12/mein_campus_noten_reader:latest
 ```
 Beim Ausführen müssen die in .env.template Umgebungsvariablen (ausgenommen BROWSER) definiert werden.
 
