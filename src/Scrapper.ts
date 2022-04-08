@@ -54,6 +54,7 @@ export default class Scrapper {
      */
     async close() {
         await this.browser.close();
+        await this.page.close();
         Scrapper.scrapper = null;
     }
 
