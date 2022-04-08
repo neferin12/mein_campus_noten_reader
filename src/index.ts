@@ -5,6 +5,7 @@ import sender from "./sender";
 import Notenspiegel from "./Notenspiegel";
 import Scrapper from "./Scrapper";
 import {log} from "./Logger";
+import {version} from "../package.json";
 
 dotenv.config();
 
@@ -20,9 +21,9 @@ function sleep(ms): Promise<any> {
 process.on('SIGTERM', () => process.exit());
 
 
-log.debug("Started");
-
 (async () => {
+    log.info("Started Campus Reader v"+version);
+
     let puppet = await Scrapper.initScrapper();
 
     // noinspection InfiniteLoopJS

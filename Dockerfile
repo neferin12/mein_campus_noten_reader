@@ -23,5 +23,5 @@ RUN pnpm run build
 
 RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
 
-CMD ["pnpm", "start"]
+CMD ["node", "."]
 
