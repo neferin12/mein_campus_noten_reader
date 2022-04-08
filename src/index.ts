@@ -1,4 +1,3 @@
-import "./tracer";
 import fs from "fs";
 import dotenv from "dotenv"
 import sender from "./sender";

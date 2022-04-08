@@ -1,6 +1,6 @@
 {
   "name": "mein_campus_noten_reader",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
   "main": "dist/src/index.js",
   "scripts": {
@@ -12,7 +12,6 @@
   "author": "Julian Pollinger",
   "license": "MIT",
   "dependencies": {
-    "dd-trace": "^1.5.0",
     "dotenv": "^10.0.0",
     "nodemailer": "^6.6.5",
     "puppeteer": "^10.4.0",
