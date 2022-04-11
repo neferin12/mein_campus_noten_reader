@@ -13,7 +13,7 @@ Beim Ausführen müssen die in .env.template Umgebungsvariablen (ausgenommen BRO
 ## Installation
 ### Installieren der Abhängigkeiten
 ```
-npm install
+pnpm install
 ```
 ### Konfiguration
 Kopieren der Datei .env.template nach .env   
@@ -21,11 +21,11 @@ Anschließend die Felder in der .env Datei ausfüllen.
 
 ### Build
 ```
-npm run build
+pnpm run build
 ```
 ### Testen
 Zum Testen der Maileinstellungen ``node dist/mailtest.js`` ausführen. 
 
 ### Ausführen
-Zum Ausführen des Readers ``node dist/index.js `` ausführen.  
+Zum Ausführen des Readers ``node . `` ausführen.  
 Für längerfristige Ausführung empfehle ich [pm2](https://pm2.io/).
