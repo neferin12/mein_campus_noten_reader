@@ -1,6 +1,6 @@
 {
   "name": "mein_campus_noten_reader",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Checkt regelmäßig, ob auf Mein Campus neue Noten eingestellt wurden",
   "main": "dist/src/index.js",
   "scripts": {
