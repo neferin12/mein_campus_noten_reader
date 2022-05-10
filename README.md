@@ -8,7 +8,7 @@ Liest kontinuierlich die Noten von [Mein Campus](https://www.campus.uni-erlangen
 ```bash
 docker pull ghcr.io/neferin12/mein_campus_noten_reader:latest
 ```
-Beim Ausführen müssen die in .env.template Umgebungsvariablen (ausgenommen BROWSER) definiert werden.
+Beim Ausführen müssen die in .env.template definierten Umgebungsvariablen (ausgenommen BROWSER) definiert werden.
 
 ## Installation
 ### Installieren der Abhängigkeiten
